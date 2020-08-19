@@ -3,7 +3,7 @@ Bot para seguir pessoas a partir de um usuário
 
 Para usar voce precisa colocar alguns parametros:
 
-email: seu email ou nome de usuario
+<b>email<b/>: seu email ou nome de usuario
 
 senha: sua senha
 
