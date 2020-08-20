@@ -3,8 +3,6 @@ import time
 import PySimpleGUI as sg
 
 
-
-
 	
 def tela():
 	sg.change_look_and_feel('DarkPurple2')
@@ -18,6 +16,8 @@ def tela():
 	]
 	janela = sg.Window('Bot Instagram').layout(layout)
 	Button, values = janela.Read()
+	if Button == None:
+		quit()
 	email = values['email']
 	password = values['password']
 	user = values['user']
@@ -38,26 +38,33 @@ def followers(): # funcao para seguir pessoas
 	url = 'https://www.instagram.com/'
 	driver.get(url)
 	time.sleep(2)
-	username = driver.find_element_by_xpath('//*[@id="react-root"]/section/main/article/div[2]/div[1]/div/form/div[2]/div/label/input')
+	username = driver.find_element_by_xpath('/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input')
 	username.send_keys(parametro[0])
 	time.sleep(3)
-	passw = driver.find_element_by_xpath('//*[@id="react-root"]/section/main/article/div[2]/div[1]/div/form/div[3]/div/label/input')
+	passw = driver.find_element_by_xpath('/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[2]/div/label/input')
 	passw.send_keys(parametro[1])
 	time.sleep(3)
-	enviar = driver.find_element_by_xpath('//*[@id="react-root"]/section/main/article/div[2]/div[1]/div/form/div[4]/button').click()
+	enviar = driver.find_element_by_xpath('/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[3]/button').click()
 	time.sleep(10)
 	driver.get(url+parametro[2])
-	time.sleep(2)
-	driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/header/section/ul/li[2]/a').click()
-	time.sleep(2)
-	n_likes = parametro[3]
-	for n in range(1,n_likes+1):
-		try:
-			follows = driver.find_element_by_xpath(f'/html/body/div[4]/div/div/div[2]/ul/div/li[{n}]/div/div[3]/button').click()
-			users = driver.find_element_by_xpath(f'/html/body/div[4]/div/div/div[2]/ul/div/li[{n}]/div/div[2]/div[2]/div')
-			print(f'Seguindo {users.text}')
-			time.sleep(1)
 
-		except:
-			continue
+	status = driver.find_element_by_class_name('rkEop')
+	status = status.text
+	if status == 'Esta conta é privada':
+		sg.popup('erro ao seguir pois a conta é privada')
+	else:
+		time.sleep(2)
+		driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/header/section/ul/li[2]/a').click()
+		time.sleep(2)
+		n_likes = parametro[3]
+		for n in range(1,n_likes+1):
+			try:
+				print(n_likes)
+				follows = driver.find_element_by_xpath(f'/html/body/div[4]/div/div/div[2]/ul/div/li[{n}]/div/div[3]/button').click()
+				users = driver.find_element_by_xpath(f'/html/body/div[4]/div/div/div[2]/ul/div/li[{n}]/div/div[2]/div[2]/div')
+				print(f'Seguindo {users.text}')
+				time.sleep(1)
+
+			except:
+				continue
 followers()
